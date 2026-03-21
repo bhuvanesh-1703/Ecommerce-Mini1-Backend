@@ -6,8 +6,7 @@ const UserSchema = new mongoose.Schema({
     phonenumber: { type: Number },
     role: { type: String, default: "admin" },
     password: { type: String, required: true },
-    status: { type: String, default: "Active" },
-    role: { type: String }
+    status: { type: String, default: "Active" }
 });
 
 const User = mongoose.model("User", UserSchema);
