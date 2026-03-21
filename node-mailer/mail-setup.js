@@ -7,8 +7,7 @@ console.log("EMAIL USER:", process.env.EMAIL_USER);
 console.log("EMAIL PASS:", process.env.EMAIL_PASS ? "Loaded" : "Missing");
 // Create transporter
 const transport = nodemailer.createTransport({
-    // host: "smtp.gmail.com",
-    // port: 465, 
+   
     service:"gmail",            
     secure: false,           
     auth: {
