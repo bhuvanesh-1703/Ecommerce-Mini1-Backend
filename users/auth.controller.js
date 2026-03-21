@@ -7,6 +7,9 @@ const register = async (req, res) => {
   const { username, email, phonenumber, password } = req.body;
 
   try {
+    if (!password) {
+      return res.status(400).json({ success: false, message: "Password is required" });
+    }
  
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -30,6 +33,7 @@ const register = async (req, res) => {
       user,
     });
   } catch (err) {
+    console.error("Register Error:", err);
     return res.status(500).json({
       success: false,
       message: "Failed to create user",
@@ -70,6 +74,7 @@ const login = async (req, res) => {
       data: { token, userData: users },
     });
   } catch (error) {
+    console.error("Login Error:", error);
     return res.status(500).json({
       success: false,
       message: "Login failed",
