@@ -10,7 +10,7 @@ const authrouter = require("./users/auth.router")
 const cartRouter = require("./products/cart/cart.route")
 const orderRouter = require ("./orders/order.route")
 const successMail = require("./node-mailer/routes")
-
+const contactRouter = require("./contact/contact.router");
 
 dotenv.config();
 app.use(cors());
@@ -32,6 +32,7 @@ app.use('/cart', cartRouter)
 app.use('/auth', authrouter)
 app.use('/admin/order',orderRouter)
 app.use('/ordersuccessmail',successMail)
+app.use('/contact', contactRouter)
 
 //image upload
 

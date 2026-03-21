@@ -1,5 +1,6 @@
 const Order = require('./order.model');
 
+
 const createOrder = async (req, res) => {
     try {
         const { userId, products, deliveryAddress, totalPrice, shippingCharge, paymentMethod } = req.body;
@@ -21,7 +22,7 @@ const getOrder = async (req, res) => {
     try {
         const order = await Order.find()
             .populate('userId')
-            .populate('products.productId'); 
+            .populate('products.productId');
 
         res.status(200).json({ success: true, message: "Orders fetched successfully", data: order });
     } catch (error) {
