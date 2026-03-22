@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
-  const { username, email, phonenumber, password } = req.body;
+  const { username, email, phonenumber, password, role } = req.body;
 
   try {
     if (!username) {
@@ -22,6 +22,15 @@ const register = async (req, res) => {
         .json({ success: false, message: "Password is required" });
     }
 
+    if (role && !["user", "admin"].includes(role)) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "Invalid role. Must be 'user' or 'admin'",
+        });
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res
@@ -36,6 +45,7 @@ const register = async (req, res) => {
       email,
       phonenumber,
       password: hashPassword,
+      role: role || "user",
     });
 
     return res.status(201).json({
