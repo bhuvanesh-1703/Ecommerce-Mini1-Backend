@@ -1,4 +1,3 @@
-
 const User = require("./users.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -7,10 +6,22 @@ const register = async (req, res) => {
   const { username, email, phonenumber, password } = req.body;
 
   try {
-    if (!password) {
-      return res.status(400).json({ success: false, message: "Password is required" });
+    if (!username) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Username is required" });
     }
- 
+    if (!email) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Email is required" });
+    }
+    if (!password) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Password is required" });
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res
@@ -42,7 +53,6 @@ const register = async (req, res) => {
   }
 };
 
-
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -55,18 +65,16 @@ const login = async (req, res) => {
     }
 
     const isMatch = await bcrypt.compare(password, users.password);
-    
+
     if (!isMatch) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid password" });
     }
 
-    const token = jwt.sign(
-      { user_id: users._id, },
-      process.env.SECRET_KEY,
-      { expiresIn: "1d" }
-    );
+    const token = jwt.sign({ user_id: users._id }, process.env.SECRET_KEY, {
+      expiresIn: "1d",
+    });
 
     return res.status(200).json({
       success: true,
