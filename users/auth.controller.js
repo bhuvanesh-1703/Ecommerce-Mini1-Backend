@@ -31,16 +31,19 @@ const register = async (req, res) => {
         });
     }
 
+    // 1. Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res
         .status(400)
-        .json({ success: false, message: "User already exists" });
+        .json({ success: false, message: "User already registered with this email" });
     }
 
+    // 2. Hash password
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({
+    // 3. Create and save new user
+    const user = new User({
       username,
       email,
       phonenumber,
@@ -48,10 +51,17 @@ const register = async (req, res) => {
       role: role || "user",
     });
 
+    await user.save();
+
     return res.status(201).json({
       success: true,
-      message: "User created successfully",
-      user,
+      message: "User registered successfully",
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role
+      },
     });
   } catch (err) {
     console.error("Register Error:", err);
